@@ -103,4 +103,12 @@ public class ActorsRepository(DataContext context) : IActorsRepository
             BirthDate = actorToUpdate.BirthDate.ToString("yyyy-MM-dd")
         };
     }
+
+    /// <inheritdoc />
+    public void DeleteActor(Guid id)
+    {
+        var actor = Context.Actors.Find(id) ?? throw new BadHttpRequestException("Actor not found.");
+        Context.Actors.Remove(actor);
+        Context.SaveChanges();
+    }
 }
