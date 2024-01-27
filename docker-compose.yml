@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  actors-service:
+    build: ./actors-service
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - ag53-network
+
+networks:
+  ag53-network:
+    name: ag53-network
+    driver: bridge
+    external: true
