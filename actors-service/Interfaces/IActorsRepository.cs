@@ -1,3 +1,4 @@
+using actors_service.Models.Filters;
 using actors_service.Models.Requests;
 using actors_service.Models.Responses;
 
@@ -29,16 +30,23 @@ public interface IActorsRepository
     /// <param name="actor">Actor data.</param>
     /// <returns>Updated actor.</returns>
     ActorDto UpdateActor(Guid id, UpdateActor actor);
-    
+
     /// <summary>
     /// Delete actor.
     /// </summary>
     /// <param name="id">Actor id.</param>
     void DeleteActor(Guid id);
-    
+
     /// <summary>
     /// Get all actors.
     /// </summary>
     /// <returns>A list of actors.</returns>
     List<ActorDto> GetActors();
+
+    /// <summary>
+    /// Get actors with pagination.
+    /// </summary>
+    /// <param name="paginationFilter">Pagination filter.</param>
+    /// <returns>Paged actors.</returns>
+    PagedActors GetPagedActors(PaginationFilter paginationFilter);
 }
