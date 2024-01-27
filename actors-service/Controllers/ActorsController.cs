@@ -124,4 +124,39 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Deletes an actor.
+    /// </summary>
+    /// <param name="id">Actor id.</param>
+    /// <returns>No content.</returns>
+    /// <response code="204">No content.</response>
+    /// <response code="400">If the actor is not found.</response>
+    /// <response code="500">If there was an error deleting the actor.</response>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult DeleteActor(Guid id)
+    {
+        try
+        {
+            ActorsRepository.DeleteActor(id);
+            return NoContent();
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }
