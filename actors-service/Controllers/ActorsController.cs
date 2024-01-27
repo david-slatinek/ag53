@@ -88,4 +88,40 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Updates an actor.
+    /// </summary>
+    /// <param name="id">Actor id.</param>
+    /// <param name="updateActor">Actor data.</param>
+    /// <returns>Updated actor.</returns>
+    /// <response code="200">Returns the updated actor.</response>
+    /// <response code="400">If the actor data is invalid.</response>
+    /// <response code="500">If there was an error updating the actor.</response>
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActorDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult UpdateActor(Guid id, [FromBody] UpdateActor updateActor)
+    {
+        try
+        {
+            var actor = ActorsRepository.UpdateActor(id, updateActor);
+            return Ok(actor);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }

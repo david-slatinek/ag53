@@ -68,4 +68,39 @@ public class ActorsRepository(DataContext context) : IActorsRepository
             BirthDate = actor.BirthDate.ToString("yyyy-MM-dd")
         };
     }
+
+    /// <inheritdoc />
+    public ActorDto UpdateActor(Guid id, UpdateActor actor)
+    {
+        var birthDate = DateOnly.Parse(actor.BirthDate);
+        if (birthDate > DateOnly.FromDateTime(DateTime.UtcNow))
+        {
+            throw new BadHttpRequestException("Birth date cannot be in the future.");
+        }
+
+        var actorToUpdate = Context.Actors.Find(id) ?? throw new BadHttpRequestException("Actor not found.");
+
+        var actorExists = Context.Actors.Any(a =>
+            a.FirstName == actor.FirstName && a.LastName == actor.LastName &&
+            a.BirthDate == birthDate);
+
+        if (actorExists)
+        {
+            throw new BadHttpRequestException("Actor already exists.");
+        }
+
+        actorToUpdate.FirstName = actor.FirstName;
+        actorToUpdate.LastName = actor.LastName;
+        actorToUpdate.BirthDate = birthDate;
+
+        Context.SaveChanges();
+
+        return new ActorDto
+        {
+            Id = actorToUpdate.Id,
+            FirstName = actorToUpdate.FirstName,
+            LastName = actorToUpdate.LastName,
+            BirthDate = actorToUpdate.BirthDate.ToString("yyyy-MM-dd")
+        };
+    }
 }
