@@ -111,4 +111,16 @@ public class ActorsRepository(DataContext context) : IActorsRepository
         Context.Actors.Remove(actor);
         Context.SaveChanges();
     }
+
+    /// <inheritdoc />
+    public List<ActorDto> GetActors()
+    {
+        return Context.Actors.Select(a => new ActorDto
+        {
+            Id = a.Id,
+            FirstName = a.FirstName,
+            LastName = a.LastName,
+            BirthDate = a.BirthDate.ToString("yyyy-MM-dd")
+        }).ToList();
+    }
 }

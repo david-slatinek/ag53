@@ -35,4 +35,10 @@ public interface IActorsRepository
     /// </summary>
     /// <param name="id">Actor id.</param>
     void DeleteActor(Guid id);
+    
+    /// <summary>
+    /// Get all actors.
+    /// </summary>
+    /// <returns>A list of actors.</returns>
+    List<ActorDto> GetActors();
 }

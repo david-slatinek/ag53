@@ -159,4 +159,43 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Get actors.
+    /// </summary>
+    /// <returns>A list of actors.</returns>
+    /// <response code="200">Returns the actors.</response>
+    /// <response code="204">If there are no actors.</response>
+    /// <response code="500">If there was an error getting the actors.</response>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ActorDto>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetActors()
+    {
+        try
+        {
+            var actors = ActorsRepository.GetActors();
+            if (actors.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(actors);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }
