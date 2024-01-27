@@ -21,4 +21,12 @@ public interface IActorsRepository
     /// <param name="id">Actor id.</param>
     /// <returns>Actor.</returns>
     ActorDto GetActorById(Guid id);
+
+    /// <summary>
+    /// Update actor.
+    /// </summary>
+    /// <param name="id">Actor id.</param>
+    /// <param name="actor">Actor data.</param>
+    /// <returns>Updated actor.</returns>
+    ActorDto UpdateActor(Guid id, UpdateActor actor);
 }
