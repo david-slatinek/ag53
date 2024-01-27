@@ -33,8 +33,10 @@ builder.Services.AddSwaggerGen(options =>
         {
             Name = "MIT License",
             Url = new Uri("https://opensource.org/licenses/MIT")
-        },
+        }
     });
+    
+    options.SupportNonNullableReferenceTypes();
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));

@@ -2,6 +2,7 @@ using actors_service.Data;
 using actors_service.Interfaces;
 using actors_service.Models.Database;
 using actors_service.Models.Requests;
+using actors_service.Models.Responses;
 
 namespace actors_service.Repositories;
 
@@ -17,7 +18,7 @@ public class ActorsRepository(DataContext context) : IActorsRepository
     private DataContext Context { get; } = context;
 
     /// <inheritdoc />
-    public Actor CreateActor(CreateActor createActor)
+    public ActorDto CreateActor(CreateActor createActor)
     {
         var birthDate = DateOnly.Parse(createActor.BirthDate);
         if (birthDate > DateOnly.FromDateTime(DateTime.UtcNow))
@@ -44,6 +45,27 @@ public class ActorsRepository(DataContext context) : IActorsRepository
 
         Context.Actors.Add(actor);
         Context.SaveChanges();
-        return actor;
+
+        return new ActorDto
+        {
+            Id = actor.Id,
+            FirstName = actor.FirstName,
+            LastName = actor.LastName,
+            BirthDate = actor.BirthDate.ToString("yyyy-MM-dd")
+        };
+    }
+
+    /// <inheritdoc />
+    public ActorDto GetActorById(Guid id)
+    {
+        var actor = Context.Actors.Find(id) ?? throw new BadHttpRequestException("Actor not found.");
+
+        return new ActorDto
+        {
+            Id = actor.Id,
+            FirstName = actor.FirstName,
+            LastName = actor.LastName,
+            BirthDate = actor.BirthDate.ToString("yyyy-MM-dd")
+        };
     }
 }
