@@ -1,5 +1,5 @@
-using actors_service.Models.Database;
 using actors_service.Models.Requests;
+using actors_service.Models.Responses;
 
 namespace actors_service.Interfaces;
 
@@ -13,5 +13,12 @@ public interface IActorsRepository
     /// </summary>
     /// <param name="actor">Actor to add.</param>
     /// <returns>Added actor.</returns>
-    Actor CreateActor(CreateActor actor);
+    ActorDto CreateActor(CreateActor actor);
+
+    /// <summary>
+    /// Get actor by id.
+    /// </summary>
+    /// <param name="id">Actor id.</param>
+    /// <returns>Actor.</returns>
+    ActorDto GetActorById(Guid id);
 }

@@ -1,5 +1,4 @@
 using actors_service.Interfaces;
-using actors_service.Models.Database;
 using actors_service.Models.Requests;
 using actors_service.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +28,7 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
     /// <response code="400">If the actor data is invalid.</response>
     /// <response code="500">If there was an error creating the actor.</response>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Actor))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActorDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult CreateActor([FromBody] CreateActor createActor)
@@ -38,6 +37,41 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
         {
             var createdActor = ActorsRepository.CreateActor(createActor);
             return CreatedAtAction(nameof(CreateActor), new { id = createdActor.Id }, createdActor);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Get actor by id.
+    /// </summary>
+    /// <param name="id">Actor id.</param>
+    /// <returns>Actor.</returns>
+    /// <response code="200">Returns the actor.</response>
+    /// <response code="400">If actor is not found.</response>
+    /// <response code="500">If there was an error getting the actor.</response>
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActorDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetActor(Guid id)
+    {
+        try
+        {
+            var actor = ActorsRepository.GetActorById(id);
+            return Ok(actor);
         }
         catch (BadHttpRequestException e)
         {
