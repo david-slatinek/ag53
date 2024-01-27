@@ -1,0 +1,5 @@
+.idea
+bin
+obj
+actors-db/.env
+actors-db/data
