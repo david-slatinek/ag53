@@ -1,4 +1,5 @@
 using actors_service.Interfaces;
+using actors_service.Models.Filters;
 using actors_service.Models.Requests;
 using actors_service.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -177,6 +178,49 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
         {
             var actors = ActorsRepository.GetActors();
             if (actors.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(actors);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Get actors using pagination.
+    /// </summary>
+    /// <param name="filter">Pagination filter.</param>
+    /// <returns>Paged actors.</returns>
+    /// <response code="200">Returns the paged actors.</response>
+    /// <response code="204">If there are no actors.</response>
+    /// <response code="400">If the page number is invalid.</response>
+    /// <response code="500">If there was an error getting the actors.</response>
+    [HttpGet("paged")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedActors))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetPagedActors([FromQuery] PaginationFilter filter)
+    {
+        try
+        {
+            var actors = ActorsRepository.GetPagedActors(filter);
+
+            if (actors.Actors.Count == 0)
             {
                 return NoContent();
             }

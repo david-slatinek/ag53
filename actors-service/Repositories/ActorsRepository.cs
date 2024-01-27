@@ -1,6 +1,7 @@
 using actors_service.Data;
 using actors_service.Interfaces;
 using actors_service.Models.Database;
+using actors_service.Models.Filters;
 using actors_service.Models.Requests;
 using actors_service.Models.Responses;
 
@@ -122,5 +123,39 @@ public class ActorsRepository(DataContext context) : IActorsRepository
             LastName = a.LastName,
             BirthDate = a.BirthDate.ToString("yyyy-MM-dd")
         }).ToList();
+    }
+
+    /// <inheritdoc />
+    public PagedActors GetPagedActors(PaginationFilter paginationFilter)
+    {
+        var actors = Context.Actors.Select(a => new ActorDto
+            {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                BirthDate = a.BirthDate.ToString("yyyy-MM-dd")
+            })
+            .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+            .Take(paginationFilter.PageSize)
+            .ToList();
+
+        var totalRecords = Context.Actors.Count();
+        var totalPages = (int)Math.Ceiling(totalRecords / (double)paginationFilter.PageSize);
+
+        if (paginationFilter.PageNumber > totalPages)
+        {
+            throw new BadHttpRequestException("Page number is greater than total pages.");
+        }
+
+        var pagedResponse = new PagedActors
+        {
+            Actors = actors,
+            PageNumber = paginationFilter.PageNumber,
+            PageSize = paginationFilter.PageSize,
+            TotalPages = totalPages,
+            TotalRecords = totalRecords
+        };
+
+        return pagedResponse;
     }
 }
