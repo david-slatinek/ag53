@@ -1,3 +1,4 @@
+using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
 
@@ -40,4 +41,11 @@ public interface IMoviesRepository
     /// Get all movies.
     /// </summary>
     List<MovieDto> GetMovies();
+
+    /// <summary>
+    /// Get movies with pagination.
+    /// </summary>
+    /// <param name="paginationFilter">Pagination filter.</param>
+    /// <returns>Paged movies.</returns>
+    PagedMovies GetPagedMovies(PaginationFilter paginationFilter);
 }

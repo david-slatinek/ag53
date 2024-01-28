@@ -1,6 +1,7 @@
 using movies_service.Data;
 using movies_service.Interfaces;
 using movies_service.Models.Database;
+using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
 
@@ -124,5 +125,37 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Description = m.Description,
             Release = m.Release.ToString("yyyy-MM-dd")
         }).ToList();
+    }
+
+    /// <inheritdoc />
+    public PagedMovies GetPagedMovies(PaginationFilter paginationFilter)
+    {
+        var movies = Context.Movies.Select(m => new MovieDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                Release = m.Release.ToString("yyyy-MM-dd")
+            })
+            .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+            .Take(paginationFilter.PageSize)
+            .ToList();
+
+        var totalRecords = Context.Movies.Count();
+        var totalPages = (int)Math.Ceiling(totalRecords / (double)paginationFilter.PageSize);
+
+        if (paginationFilter.PageNumber > totalPages && totalPages > 0)
+        {
+            throw new BadHttpRequestException("Page number is greater than total pages.");
+        }
+
+        return new PagedMovies
+        {
+            Movies = movies,
+            PageNumber = paginationFilter.PageNumber,
+            PageSize = paginationFilter.PageSize,
+            TotalPages = totalPages,
+            TotalRecords = totalRecords
+        };
     }
 }

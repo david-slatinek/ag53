@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using movies_service.Controllers;
 using movies_service.Interfaces;
 using movies_service.Mocking;
+using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
 
@@ -155,5 +156,44 @@ public class MoviesControllerTest
         Assert.Equal(movieDto2.Title, movieDtos[1].Title);
         Assert.Equal(movieDto2.Description, movieDtos[1].Description);
         Assert.Equal(movieDto2.Release, movieDtos[1].Release);
+    }
+
+    /// <summary>
+    /// Test get paged movies endpoint.
+    /// </summary>
+    [Fact]
+    public void TestGetPagedMovies()
+    {
+        // Arrange
+        const int numberOfMovies = 50;
+
+        Enumerable.Range(1, numberOfMovies).ToList().ForEach(i =>
+        {
+            var createMovie = new CreateMovie
+            {
+                Title = $"Movie {i}",
+                Description = $"Description {i}",
+                Release = "2021-01-01"
+            };
+
+            _controller.CreateMovie(createMovie);
+        });
+
+        var paginationFilter = new PaginationFilter();
+
+        // Act
+        var result = _controller.GetPagedMovies(paginationFilter);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var pagedMovies = Assert.IsType<PagedMovies>(okResult.Value);
+
+        Assert.NotEmpty(pagedMovies.Movies);
+        Assert.Equal(paginationFilter.PageSize, pagedMovies.Movies.Count);
+
+        Assert.Equal(1, pagedMovies.PageNumber);
+        Assert.Equal(20, pagedMovies.PageSize);
+        Assert.Equal(3, pagedMovies.TotalPages);
+        Assert.Equal(numberOfMovies, pagedMovies.TotalRecords);
     }
 }
