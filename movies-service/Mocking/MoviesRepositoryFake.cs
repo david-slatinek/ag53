@@ -127,4 +127,17 @@ public class MoviesRepositoryFake : IMoviesRepository
             TotalRecords = totalRecords
         };
     }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMovieByTitle(string title)
+    {
+        return _movies.Where(m => m.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+            .Select(m => new MovieDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                Release = m.Release.ToString("yyyy-MM-dd")
+            }).ToList();
+    }
 }

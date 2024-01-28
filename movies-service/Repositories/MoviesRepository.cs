@@ -4,6 +4,8 @@ using movies_service.Models.Database;
 using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace movies_service.Repositories;
 
@@ -157,5 +159,21 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             TotalPages = totalPages,
             TotalRecords = totalRecords
         };
+    }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMovieByTitle(string title)
+    {
+        var movies = Context.Movies
+            .Where(m => EF.Functions.ILike(m.Title, $"%{title}%"))
+            .ToList();
+
+        return movies.Select(m => new MovieDto
+        {
+            Id = m.Id,
+            Title = m.Title,
+            Description = m.Description,
+            Release = m.Release.ToString("yyyy-MM-dd")
+        }).ToList();
     }
 }

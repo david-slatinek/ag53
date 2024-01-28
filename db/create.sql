@@ -16,3 +16,5 @@ CREATE TABLE movies
     description TEXT         NOT NULL,
     release     DATE         NOT NULL
 );
+
+CREATE INDEX movies_title_idx ON movies (title);
