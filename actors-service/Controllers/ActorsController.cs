@@ -13,6 +13,7 @@ namespace actors_service.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Produces("application/json")]
+[Consumes("application/json")]
 public class ActorsController(IActorsRepository actorsRepository) : Controller
 {
     /// <summary>
