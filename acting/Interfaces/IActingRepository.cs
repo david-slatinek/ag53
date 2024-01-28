@@ -21,4 +21,10 @@ public interface IActingRepository
     /// <param name="createActing">Acting data.</param>
     /// <returns>True if the acting already exists, false otherwise.</returns>
     bool AlreadyExists(CreateActing createActing);
+
+    /// <summary>
+    /// Delete an acting.
+    /// </summary>
+    /// <param name="id">Acting ID.</param>
+    void DeleteActing(int id);
 }
