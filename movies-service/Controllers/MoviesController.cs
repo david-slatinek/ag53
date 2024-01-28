@@ -54,4 +54,39 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Get movie by id.
+    /// </summary>
+    /// <param name="id">Movie id.</param>
+    /// <returns>Movie.</returns>
+    /// <response code="200">Returns the movie.</response>
+    /// <response code="400">If movie is not found.</response>
+    /// <response code="500">If there was an error getting the movie.</response>
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetMovie(Guid id)
+    {
+        try
+        {
+            var movie = MoviesRepository.GetMovie(id);
+            return Ok(movie);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }

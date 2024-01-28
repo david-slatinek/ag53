@@ -45,4 +45,18 @@ public class MoviesRepositoryFake : IMoviesRepository
             Release = movie.Release.ToString("yyyy-MM-dd")
         };
     }
+
+    /// <inheritdoc />
+    public MovieDto GetMovie(Guid id)
+    {
+        var movie = _movies.FirstOrDefault(m => m.Id == id) ?? throw new BadHttpRequestException("Movie not found.");
+
+        return new MovieDto
+        {
+            Id = movie.Id,
+            Title = movie.Title,
+            Description = movie.Description,
+            Release = movie.Release.ToString("yyyy-MM-dd")
+        };
+    }
 }

@@ -59,4 +59,26 @@ public class MoviesControllerTest
         Assert.Equal(createMovie.Description, movieDto.Description);
         Assert.Equal(createMovie.Release, movieDto.Release);
     }
+
+    /// <summary>
+    /// Test get movie by id endpoint.
+    /// </summary>
+    [Fact]
+    public void TestGetMovieById()
+    {
+        // Arrange
+        var (_, movieDto) = CreateMovie();
+
+        // Act
+        var result = _controller.GetMovie(movieDto.Id);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedMovieDto = Assert.IsType<MovieDto>(okResult.Value);
+
+        Assert.Equal(movieDto.Id, returnedMovieDto.Id);
+        Assert.Equal(movieDto.Title, returnedMovieDto.Title);
+        Assert.Equal(movieDto.Description, returnedMovieDto.Description);
+        Assert.Equal(movieDto.Release, returnedMovieDto.Release);
+    }
 }
