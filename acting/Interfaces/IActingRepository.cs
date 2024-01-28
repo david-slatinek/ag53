@@ -1,5 +1,6 @@
 using acting.Models.Database;
 using acting.Models.Requests;
+using acting.Models.Responses;
 
 namespace acting.Interfaces;
 
@@ -27,4 +28,11 @@ public interface IActingRepository
     /// </summary>
     /// <param name="id">Acting ID.</param>
     void DeleteActing(int id);
+
+    /// <summary>
+    /// Get all movies for an actor.
+    /// </summary>
+    /// <param name="actorId">Actor ID.</param>
+    /// <returns>List of movies for the actor.</returns>
+    List<MovieDto> GetMoviesForActor(Guid actorId);
 }

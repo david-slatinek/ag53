@@ -24,4 +24,9 @@ public class ActorDto
     /// Birth date of the actor.
     /// </summary>
     public string BirthDate { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Movies the actor has acted in.
+    /// </summary>
+    public List<MovieDto> Movies { get; set; } = [];
 }

@@ -96,4 +96,37 @@ public class ActingController(IActingService actingService, IActingRepository ac
             });
         }
     }
+
+    /// <summary>
+    /// Get all movies for an actor.
+    /// </summary>
+    /// <param name="actorId">Actor ID.</param>
+    /// <returns>List of movies for the actor.</returns>
+    /// <response code="200">Returns the movies for the actor.</response>
+    /// <response code="204">If there are no movies for the actor.</response>
+    /// <response code="500">If there was an error getting the movies for the actor.</response>
+    [HttpGet("actors/{actorId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MovieDto>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
+    public IActionResult GetMoviesForActor(Guid actorId)
+    {
+        try
+        {
+            var movies = ActingRepository.GetMoviesForActor(actorId);
+            if (movies.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(movies);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }

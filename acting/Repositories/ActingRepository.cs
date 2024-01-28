@@ -2,6 +2,7 @@ using acting.Data;
 using acting.Interfaces;
 using acting.Models.Database;
 using acting.Models.Requests;
+using acting.Models.Responses;
 
 namespace acting.Repositories;
 
@@ -45,5 +46,14 @@ public class ActingRepository(DataContext context) : IActingRepository
 
         Context.Acting.Remove(acting);
         Context.SaveChanges();
+    }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMoviesForActor(Guid actorId)
+    {
+        return Context.Acting.Where(a => a.ActorId == actorId).Select(a => new MovieDto
+        {
+            Id = a.MovieId
+        }).ToList();
     }
 }

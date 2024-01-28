@@ -3,6 +3,7 @@ using actors_service.Data;
 using actors_service.Interfaces;
 using actors_service.Repositories;
 using actors_service.Seed;
+using actors_service.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 );
 builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IActorsRepository, ActorsRepository>();
+builder.Services.AddScoped<IMoviesService, MoviesService>();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -37,7 +39,7 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://opensource.org/licenses/MIT")
         }
     });
-    
+
     options.SupportNonNullableReferenceTypes();
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

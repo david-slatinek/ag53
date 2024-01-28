@@ -140,4 +140,10 @@ public class MoviesRepositoryFake : IMoviesRepository
                 Release = m.Release.ToString("yyyy-MM-dd")
             }).ToList();
     }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMoviesByIds(List<Guid> ids)
+    {
+        throw new NotImplementedException();
+    }
 }

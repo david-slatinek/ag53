@@ -175,4 +175,20 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Release = m.Release.ToString("yyyy-MM-dd")
         }).ToList();
     }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMoviesByIds(List<Guid> ids)
+    {
+        var movies = Context.Movies
+            .Where(m => ids.Contains(m.Id))
+            .ToList();
+
+        return movies.Select(m => new MovieDto
+        {
+            Id = m.Id,
+            Title = m.Title,
+            Description = m.Description,
+            Release = m.Release.ToString("yyyy-MM-dd")
+        }).ToList();
+    }
 }

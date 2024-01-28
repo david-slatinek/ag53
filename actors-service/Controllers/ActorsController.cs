@@ -9,17 +9,23 @@ namespace actors_service.Controllers;
 /// <summary>
 /// Actors controller.
 /// </summary>
-/// <param name="actorsRepository">Actors repository.</param>
+/// <param name="actorsRepository">Actors repository.</param>1
+/// <param name="moviesService">Movies service.</param>
 [Route("api/[controller]")]
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
-public class ActorsController(IActorsRepository actorsRepository) : Controller
+public class ActorsController(IActorsRepository actorsRepository, IMoviesService moviesService) : Controller
 {
     /// <summary>
     /// Actors repository.
     /// </summary>
     private IActorsRepository ActorsRepository { get; } = actorsRepository;
+
+    /// <summary>
+    /// Movies service.
+    /// </summary>
+    private IMoviesService MoviesService { get; } = moviesService;
 
     /// <summary>
     /// Creates an actor.
@@ -73,6 +79,10 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
         try
         {
             var actor = ActorsRepository.GetActorById(id);
+            var movies = MoviesService.GetMoviesForActor(id);
+
+            actor.Movies = movies;
+
             return Ok(actor);
         }
         catch (BadHttpRequestException e)
@@ -183,6 +193,12 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
                 return NoContent();
             }
 
+            foreach (var actor in actors)
+            {
+                var movies = MoviesService.GetMoviesForActor(actor.Id);
+                actor.Movies = movies;
+            }
+
             return Ok(actors);
         }
         catch (BadHttpRequestException e)
@@ -224,6 +240,12 @@ public class ActorsController(IActorsRepository actorsRepository) : Controller
             if (actors.Actors.Count == 0)
             {
                 return NoContent();
+            }
+            
+            foreach (var actor in actors.Actors)
+            {
+                var movies = MoviesService.GetMoviesForActor(actor.Id);
+                actor.Movies = movies;
             }
 
             return Ok(actors);
