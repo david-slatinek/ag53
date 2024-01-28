@@ -11,7 +11,6 @@ namespace movies_service.Mocking;
 public class MoviesRepositoryFake : IMoviesRepository
 {
     private List<Movie> _movies = [];
-    private IMoviesRepository _moviesRepositoryImplementation;
 
     /// <inheritdoc />
     public MovieDto CreateMovie(CreateMovie createMovie)
@@ -20,12 +19,6 @@ public class MoviesRepositoryFake : IMoviesRepository
         if (releaseDate > DateOnly.FromDateTime(DateTime.UtcNow))
         {
             throw new BadHttpRequestException("Release date cannot be in the future.");
-        }
-
-        var movieExists = _movies.Any(m => m.Title == createMovie.Title && m.Release == releaseDate);
-        if (movieExists)
-        {
-            throw new BadHttpRequestException("Movie already exists.");
         }
 
         var movie = new Movie
@@ -93,5 +86,17 @@ public class MoviesRepositoryFake : IMoviesRepository
     {
         var movie = _movies.FirstOrDefault(m => m.Id == id) ?? throw new BadHttpRequestException("Movie not found.");
         _movies.Remove(movie);
+    }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMovies()
+    {
+        return _movies.Select(m => new MovieDto
+        {
+            Id = m.Id,
+            Title = m.Title,
+            Description = m.Description,
+            Release = m.Release.ToString("yyyy-MM-dd")
+        }).ToList();
     }
 }

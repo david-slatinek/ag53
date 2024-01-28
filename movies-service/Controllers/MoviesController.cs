@@ -160,4 +160,37 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Get all movies.
+    /// </summary>
+    /// <returns>A list of movies.</returns>
+    /// <response code="200">Returns a list of movies.</response>
+    /// <response code="204">If there are no movies.</response>
+    /// <response code="500">If there was an error getting the movies.</response>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MovieDto>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetMovies()
+    {
+        try
+        {
+            var movies = MoviesRepository.GetMovies();
+
+            if (movies.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(movies);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }
