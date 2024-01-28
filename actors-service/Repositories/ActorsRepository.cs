@@ -142,12 +142,12 @@ public class ActorsRepository(DataContext context) : IActorsRepository
         var totalRecords = Context.Actors.Count();
         var totalPages = (int)Math.Ceiling(totalRecords / (double)paginationFilter.PageSize);
 
-        if (paginationFilter.PageNumber > totalPages)
+        if (paginationFilter.PageNumber > totalPages && totalPages > 0)
         {
             throw new BadHttpRequestException("Page number is greater than total pages.");
         }
 
-        var pagedResponse = new PagedActors
+        return new PagedActors
         {
             Actors = actors,
             PageNumber = paginationFilter.PageNumber,
@@ -155,7 +155,5 @@ public class ActorsRepository(DataContext context) : IActorsRepository
             TotalPages = totalPages,
             TotalRecords = totalRecords
         };
-
-        return pagedResponse;
     }
 }

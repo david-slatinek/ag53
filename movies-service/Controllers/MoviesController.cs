@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using movies_service.Interfaces;
+using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
 
@@ -184,6 +185,48 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
             }
 
             return Ok(movies);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Get movies with pagination.
+    /// </summary>
+    /// <param name="paginationFilter">Pagination filter.</param>
+    /// <returns>Paged movies.</returns>
+    /// <response code="200">Returns paged movies.</response>
+    /// <response code="204">If there are no movies.</response>
+    /// <response code="400">If the pagination filter is invalid.</response>
+    /// <response code="500">If there was an error getting the movies.</response>
+    [HttpGet("paged")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedMovies))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetPagedMovies([FromQuery] PaginationFilter paginationFilter)
+    {
+        try
+        {
+            var pagedMovies = MoviesRepository.GetPagedMovies(paginationFilter);
+            if (pagedMovies.Movies.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(pagedMovies);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
         }
         catch (Exception e)
         {

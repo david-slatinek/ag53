@@ -1,5 +1,6 @@
 using movies_service.Interfaces;
 using movies_service.Models.Database;
+using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
 
@@ -98,5 +99,32 @@ public class MoviesRepositoryFake : IMoviesRepository
             Description = m.Description,
             Release = m.Release.ToString("yyyy-MM-dd")
         }).ToList();
+    }
+
+    /// <inheritdoc />
+    public PagedMovies GetPagedMovies(PaginationFilter paginationFilter)
+    {
+        var movies = _movies.Select(m => new MovieDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                Release = m.Release.ToString("yyyy-MM-dd")
+            })
+            .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+            .Take(paginationFilter.PageSize)
+            .ToList();
+
+        var totalRecords = _movies.Count;
+        var totalPages = (int)Math.Ceiling(totalRecords / (double)paginationFilter.PageSize);
+
+        return new PagedMovies
+        {
+            Movies = movies,
+            PageNumber = paginationFilter.PageNumber,
+            PageSize = paginationFilter.PageSize,
+            TotalPages = totalPages,
+            TotalRecords = totalRecords
+        };
     }
 }
