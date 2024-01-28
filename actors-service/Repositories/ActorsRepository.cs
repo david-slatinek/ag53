@@ -59,7 +59,7 @@ public class ActorsRepository(DataContext context) : IActorsRepository
     /// <inheritdoc />
     public ActorDto GetActorById(Guid id)
     {
-        var actor = Context.Actors.Find(id) ?? throw new BadHttpRequestException("Actor not found.");
+        var actor = Context.Actors.Find(id) ?? throw new BadHttpRequestException($"Actor with id = {id} not found.");
 
         return new ActorDto
         {

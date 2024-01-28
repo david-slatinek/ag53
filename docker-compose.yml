@@ -16,6 +16,15 @@ services:
       - "8081:8081"
     networks:
       - ag53-network
+  
+  acting-service:
+    build: ./acting
+    restart: always
+    ports:
+      - "8082:8082"
+    networks:
+      - ag53-network
+    depends_on: [ actors-service, movies-service ]
 
 networks:
   ag53-network:
