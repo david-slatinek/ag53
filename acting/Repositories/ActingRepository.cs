@@ -36,4 +36,14 @@ public class ActingRepository(DataContext context) : IActingRepository
     {
         return Context.Acting.Any(a => a.ActorId == createActing.ActorId && a.MovieId == createActing.MovieId);
     }
+
+    /// <inheritdoc />
+    public void DeleteActing(int id)
+    {
+        var acting = Context.Acting.Find(id) ??
+                     throw new BadHttpRequestException($"Acting with id = {id} does not exist.");
+
+        Context.Acting.Remove(acting);
+        Context.SaveChanges();
+    }
 }
