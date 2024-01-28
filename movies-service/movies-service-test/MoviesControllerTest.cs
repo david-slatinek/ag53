@@ -196,4 +196,35 @@ public class MoviesControllerTest
         Assert.Equal(3, pagedMovies.TotalPages);
         Assert.Equal(numberOfMovies, pagedMovies.TotalRecords);
     }
+    
+    /// <summary>
+    /// Test get movies by title endpoint.
+    /// </summary>
+    [Fact]
+    public void TestGetMovieByTitle()
+    {
+        // Arrange
+        var (_, movieDto1) = CreateMovie();
+        var (_, movieDto2) = CreateMovie();
+
+        // Act
+        var result = _controller.GetMovieByTitle(movieDto1.Title);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var movieDtos = Assert.IsType<List<MovieDto>>(okResult.Value);
+
+        Assert.NotEmpty(movieDtos);
+        Assert.Equal(2, movieDtos.Count);
+
+        Assert.Equal(movieDto1.Id, movieDtos[0].Id);
+        Assert.Equal(movieDto1.Title, movieDtos[0].Title);
+        Assert.Equal(movieDto1.Description, movieDtos[0].Description);
+        Assert.Equal(movieDto1.Release, movieDtos[0].Release);
+
+        Assert.Equal(movieDto2.Id, movieDtos[1].Id);
+        Assert.Equal(movieDto2.Title, movieDtos[1].Title);
+        Assert.Equal(movieDto2.Description, movieDtos[1].Description);
+        Assert.Equal(movieDto2.Release, movieDtos[1].Release);
+    }
 }

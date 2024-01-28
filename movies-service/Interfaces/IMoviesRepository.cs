@@ -48,4 +48,11 @@ public interface IMoviesRepository
     /// <param name="paginationFilter">Pagination filter.</param>
     /// <returns>Paged movies.</returns>
     PagedMovies GetPagedMovies(PaginationFilter paginationFilter);
+
+    /// <summary>
+    /// Get movies by title.
+    /// </summary>
+    /// <param name="title">Movie title.</param>
+    /// <returns>A list of movies.</returns>
+    List<MovieDto> GetMovieByTitle(string title);
 }
