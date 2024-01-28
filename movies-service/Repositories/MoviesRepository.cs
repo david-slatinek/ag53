@@ -103,4 +103,14 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Release = movieToUpdate.Release.ToString("yyyy-MM-dd")
         };
     }
+
+    /// <inheritdoc />
+    public void DeleteMovie(Guid id)
+    {
+        var movie = Context.Movies.FirstOrDefault(m => m.Id == id) ??
+                    throw new BadHttpRequestException("Movie not found.");
+
+        Context.Movies.Remove(movie);
+        Context.SaveChanges();
+    }
 }

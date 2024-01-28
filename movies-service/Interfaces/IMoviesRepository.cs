@@ -29,4 +29,10 @@ public interface IMoviesRepository
     /// <param name="updateMovie">Movie data.</param>
     /// <returns>Updated movie.</returns>
     MovieDto UpdateMovie(Guid id, UpdateMovie updateMovie);
+
+    /// <summary>
+    /// Delete a movie.
+    /// </summary>
+    /// <param name="id">Movie id.</param>
+    void DeleteMovie(Guid id);
 }

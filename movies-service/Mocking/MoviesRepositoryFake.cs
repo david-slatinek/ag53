@@ -11,6 +11,7 @@ namespace movies_service.Mocking;
 public class MoviesRepositoryFake : IMoviesRepository
 {
     private List<Movie> _movies = [];
+    private IMoviesRepository _moviesRepositoryImplementation;
 
     /// <inheritdoc />
     public MovieDto CreateMovie(CreateMovie createMovie)
@@ -85,5 +86,12 @@ public class MoviesRepositoryFake : IMoviesRepository
             Description = movieToUpdate.Description,
             Release = movieToUpdate.Release.ToString("yyyy-MM-dd")
         };
+    }
+
+    /// <inheritdoc />
+    public void DeleteMovie(Guid id)
+    {
+        var movie = _movies.FirstOrDefault(m => m.Id == id) ?? throw new BadHttpRequestException("Movie not found.");
+        _movies.Remove(movie);
     }
 }
