@@ -96,6 +96,9 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <param name="id">Movie id.</param>
     /// <param name="updateMovie">Movie data.</param>
     /// <returns>Updated movie.</returns>
+    /// <response code="200">Returns the updated movie.</response>
+    /// <response code="400">If the movie data is invalid.</response>
+    /// <response code="500">If there was an error updating the movie.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -106,6 +109,41 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
         {
             var movie = MoviesRepository.UpdateMovie(id, updateMovie);
             return Ok(movie);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Delete a movie.
+    /// </summary>
+    /// <param name="id">Movie id.</param>
+    /// <returns>No content.</returns>
+    /// <response code="204">Movie deleted.</response>
+    /// <response code="400">If movie is not found.</response>
+    /// <response code="500">If there was an error deleting the movie.</response>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult DeleteMovie(Guid id)
+    {
+        try
+        {
+            MoviesRepository.DeleteMovie(id);
+            return NoContent();
         }
         catch (BadHttpRequestException e)
         {

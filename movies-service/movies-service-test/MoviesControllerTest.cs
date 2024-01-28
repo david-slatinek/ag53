@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using movies_service.Controllers;
 using movies_service.Interfaces;
@@ -108,5 +109,21 @@ public class MoviesControllerTest
         Assert.Equal(updateMovie.Title, returnedMovieDto.Title);
         Assert.Equal(updateMovie.Description, returnedMovieDto.Description);
         Assert.Equal(updateMovie.Release, returnedMovieDto.Release);
+    }
+    
+    /// <summary>
+    /// Test delete movie endpoint.
+    /// </summary>
+    [Fact]
+    public void TestDeleteMovie()
+    {
+        // Arrange
+        var (_, movieDto) = CreateMovie();
+
+        // Act
+        var result = _controller.DeleteMovie(movieDto.Id);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
     }
 }
