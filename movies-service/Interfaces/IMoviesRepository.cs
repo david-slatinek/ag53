@@ -21,4 +21,12 @@ public interface IMoviesRepository
     /// <param name="id">Movie id.</param>
     /// <returns>Movie.</returns>
     MovieDto GetMovie(Guid id);
+
+    /// <summary>
+    /// Update a movie.
+    /// </summary>
+    /// <param name="id">Movie id.</param>
+    /// <param name="updateMovie">Movie data.</param>
+    /// <returns>Updated movie.</returns>
+    MovieDto UpdateMovie(Guid id, UpdateMovie updateMovie);
 }

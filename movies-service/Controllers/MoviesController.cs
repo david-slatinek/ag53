@@ -89,4 +89,37 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Update a movie.
+    /// </summary>
+    /// <param name="id">Movie id.</param>
+    /// <param name="updateMovie">Movie data.</param>
+    /// <returns>Updated movie.</returns>
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult UpdateMovie(Guid id, [FromBody] UpdateMovie updateMovie)
+    {
+        try
+        {
+            var movie = MoviesRepository.UpdateMovie(id, updateMovie);
+            return Ok(movie);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }

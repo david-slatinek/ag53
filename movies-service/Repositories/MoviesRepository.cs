@@ -68,4 +68,39 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Release = movie.Release.ToString("yyyy-MM-dd")
         };
     }
+
+    /// <inheritdoc />
+    public MovieDto UpdateMovie(Guid id, UpdateMovie updateMovie)
+    {
+        var release = DateOnly.Parse(updateMovie.Release);
+        if (release > DateOnly.FromDateTime(DateTime.UtcNow))
+        {
+            throw new BadHttpRequestException("Release date cannot be in the future.");
+        }
+
+        var movieToUpdate = Context.Movies.FirstOrDefault(m => m.Id == id) ??
+                            throw new BadHttpRequestException("Movie not found.");
+
+        var movieExists = Context.Movies.Any(m =>
+            m.Title == updateMovie.Title && m.Release == release && m.Release == release && m.Id != id);
+
+        if (movieExists)
+        {
+            throw new BadHttpRequestException("Movie already exists.");
+        }
+
+        movieToUpdate.Title = updateMovie.Title;
+        movieToUpdate.Description = updateMovie.Description;
+        movieToUpdate.Release = release;
+
+        Context.SaveChanges();
+
+        return new MovieDto
+        {
+            Id = movieToUpdate.Id,
+            Title = movieToUpdate.Title,
+            Description = movieToUpdate.Description,
+            Release = movieToUpdate.Release.ToString("yyyy-MM-dd")
+        };
+    }
 }
