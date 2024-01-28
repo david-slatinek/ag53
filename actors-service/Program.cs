@@ -17,6 +17,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IActorsRepository, ActorsRepository>();
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo

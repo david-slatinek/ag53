@@ -81,4 +81,32 @@ public class MoviesControllerTest
         Assert.Equal(movieDto.Description, returnedMovieDto.Description);
         Assert.Equal(movieDto.Release, returnedMovieDto.Release);
     }
+    
+    /// <summary>
+    /// Test update movie endpoint.
+    /// </summary>
+    [Fact]
+    public void TestUpdateMovie()
+    {
+        // Arrange
+        var (_, movieDto) = CreateMovie();
+        var updateMovie = new UpdateMovie
+        {
+            Title = "Updated Movie",
+            Description = "Updated Description",
+            Release = "2021-01-01"
+        };
+
+        // Act
+        var result = _controller.UpdateMovie(movieDto.Id, updateMovie);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedMovieDto = Assert.IsType<MovieDto>(okResult.Value);
+
+        Assert.Equal(movieDto.Id, returnedMovieDto.Id);
+        Assert.Equal(updateMovie.Title, returnedMovieDto.Title);
+        Assert.Equal(updateMovie.Description, returnedMovieDto.Description);
+        Assert.Equal(updateMovie.Release, returnedMovieDto.Release);
+    }
 }
