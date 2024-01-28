@@ -55,4 +55,11 @@ public interface IMoviesRepository
     /// <param name="title">Movie title.</param>
     /// <returns>A list of movies.</returns>
     List<MovieDto> GetMovieByTitle(string title);
+
+    /// <summary>
+    /// Get movies by ids.
+    /// </summary>
+    /// <param name="ids">Movies ids.</param>
+    /// <returns>A list of movies.</returns>
+    List<MovieDto> GetMoviesByIds(List<Guid> ids);
 }

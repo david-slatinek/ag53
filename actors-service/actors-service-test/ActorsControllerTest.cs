@@ -21,7 +21,7 @@ public class ActorsControllerTest
     public ActorsControllerTest()
     {
         IActorsRepository repository = new ActorsRepositoryFake();
-        _controller = new ActorsController(repository);
+        _controller = new ActorsController(repository, null);
     }
 
     /// <summary>
