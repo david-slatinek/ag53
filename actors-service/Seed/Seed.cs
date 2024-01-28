@@ -1,12 +1,18 @@
 using actors_service.Data;
-using actors_service.Models;
 using actors_service.Models.Database;
 using Bogus;
 
 namespace actors_service.Seed;
 
+/// <summary>
+/// Seed class for Actors.
+/// </summary>
+/// <param name="context"></param>
 public class Seed(DataContext context)
 {
+    /// <summary>
+    /// Seed Actors.
+    /// </summary>
     public async Task SeedAsync()
     {
         await context.Database.EnsureCreatedAsync();
@@ -15,6 +21,10 @@ public class Seed(DataContext context)
         await context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Get random Actor.
+    /// </summary>
+    /// <returns>Random Actor.</returns>
     private static Actor RandomActor() => new Faker<Actor>()
         .RuleFor(a => a.Id, f => f.Random.Guid())
         .RuleFor(a => a.FirstName, f => f.Person.FirstName)
