@@ -14,4 +14,11 @@ public interface IMoviesRepository
     /// <param name="createMovie">Movie to add.</param>
     /// <returns>Added movie.</returns>
     MovieDto CreateMovie(CreateMovie createMovie);
+
+    /// <summary>
+    /// Get a movie by id.
+    /// </summary>
+    /// <param name="id">Movie id.</param>
+    /// <returns>Movie.</returns>
+    MovieDto GetMovie(Guid id);
 }
