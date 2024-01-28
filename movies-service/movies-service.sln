@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movies-service", "movies-service.csproj", "{A199F0D3-09A5-4888-8F36-5F09B195731C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movies-service-test", "movies-service-test\movies-service-test.csproj", "{53068073-1B0A-4D0A-8740-765D87CC8666}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A199F0D3-09A5-4888-8F36-5F09B195731C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A199F0D3-09A5-4888-8F36-5F09B195731C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A199F0D3-09A5-4888-8F36-5F09B195731C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A199F0D3-09A5-4888-8F36-5F09B195731C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53068073-1B0A-4D0A-8740-765D87CC8666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53068073-1B0A-4D0A-8740-765D87CC8666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53068073-1B0A-4D0A-8740-765D87CC8666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53068073-1B0A-4D0A-8740-765D87CC8666}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
