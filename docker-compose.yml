@@ -8,6 +8,14 @@ services:
       - "8080:8080"
     networks:
       - ag53-network
+  
+  movies-service:
+    build: ./movies-service
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - ag53-network
 
 networks:
   ag53-network:
