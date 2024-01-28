@@ -18,3 +18,21 @@ CREATE TABLE movies
 );
 
 CREATE INDEX movies_title_idx ON movies (title);
+
+CREATE TABLE actors_movies
+(
+    id       int GENERATED ALWAYS AS IDENTITY,
+    fk_actor UUID NOT NULL,
+    fk_movie UUID NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE actors_movies
+    ADD CONSTRAINT fkc_actors_actors_movies FOREIGN KEY (fk_actor) REFERENCES actors (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;
+
+ALTER TABLE actors_movies
+    ADD CONSTRAINT fkc_movies_actors_movies FOREIGN KEY (fk_movie) REFERENCES movies (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;

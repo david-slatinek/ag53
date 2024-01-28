@@ -1,8 +1,8 @@
 using System.Reflection;
-using actors_service.Data;
-using actors_service.Interfaces;
-using actors_service.Repositories;
-using actors_service.Seed;
+using acting.Data;
+using acting.Interfaces;
+using acting.Repositories;
+using acting.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -14,8 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
-builder.Services.AddTransient<Seed>();
-builder.Services.AddScoped<IActorsRepository, ActorsRepository>();
+builder.Services.AddScoped<IActingRepository, ActingRepository>();
+builder.Services.AddScoped<IActingService, ActingService>();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -24,8 +24,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Actors API",
-        Description = "Actors API.",
+        Title = "Acting API",
+        Description = "Acting API.",
         Contact = new OpenApiContact
         {
             Name = "David Slatinek",
@@ -37,7 +37,7 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://opensource.org/licenses/MIT")
         }
     });
-    
+
     options.SupportNonNullableReferenceTypes();
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -45,30 +45,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
-
-if (args.Length > 0)
-{
-    switch (args[0])
-    {
-        case "seed":
-        {
-            using var scope = app.Services.CreateScope();
-            var seed = scope.ServiceProvider.GetRequiredService<Seed>();
-            await seed.SeedAsync();
-            break;
-        }
-
-        case "delete":
-        {
-            using var scope = app.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<DataContext>();
-            await context.Database.ExecuteSqlRawAsync("DELETE FROM actors");
-            break;
-        }
-    }
-
-    return;
-}
 
 app.UseSwagger();
 app.UseSwaggerUI();

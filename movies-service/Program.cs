@@ -62,7 +62,7 @@ if (args.Length > 0)
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<DataContext>();
-            await context.Database.EnsureDeletedAsync();
+            await context.Database.ExecuteSqlRawAsync("DELETE FROM movies");
             break;
         }
     }

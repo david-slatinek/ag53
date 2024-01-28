@@ -5,7 +5,6 @@ using movies_service.Models.Filters;
 using movies_service.Models.Requests;
 using movies_service.Models.Responses;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace movies_service.Repositories;
 
