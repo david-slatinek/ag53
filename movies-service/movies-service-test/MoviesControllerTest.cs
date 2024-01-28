@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using movies_service.Controllers;
 using movies_service.Interfaces;
@@ -82,7 +81,7 @@ public class MoviesControllerTest
         Assert.Equal(movieDto.Description, returnedMovieDto.Description);
         Assert.Equal(movieDto.Release, returnedMovieDto.Release);
     }
-    
+
     /// <summary>
     /// Test update movie endpoint.
     /// </summary>
@@ -110,7 +109,7 @@ public class MoviesControllerTest
         Assert.Equal(updateMovie.Description, returnedMovieDto.Description);
         Assert.Equal(updateMovie.Release, returnedMovieDto.Release);
     }
-    
+
     /// <summary>
     /// Test delete movie endpoint.
     /// </summary>
@@ -125,5 +124,36 @@ public class MoviesControllerTest
 
         // Assert
         Assert.IsType<NoContentResult>(result);
+    }
+
+    /// <summary>
+    /// Test get all movies endpoint.
+    /// </summary>
+    [Fact]
+    public void TestGetAllMovies()
+    {
+        // Arrange
+        var (_, movieDto1) = CreateMovie();
+        var (_, movieDto2) = CreateMovie();
+
+        // Act
+        var result = _controller.GetMovies();
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var movieDtos = Assert.IsType<List<MovieDto>>(okResult.Value);
+
+        Assert.NotEmpty(movieDtos);
+        Assert.Equal(2, movieDtos.Count);
+
+        Assert.Equal(movieDto1.Id, movieDtos[0].Id);
+        Assert.Equal(movieDto1.Title, movieDtos[0].Title);
+        Assert.Equal(movieDto1.Description, movieDtos[0].Description);
+        Assert.Equal(movieDto1.Release, movieDtos[0].Release);
+
+        Assert.Equal(movieDto2.Id, movieDtos[1].Id);
+        Assert.Equal(movieDto2.Title, movieDtos[1].Title);
+        Assert.Equal(movieDto2.Description, movieDtos[1].Description);
+        Assert.Equal(movieDto2.Release, movieDtos[1].Release);
     }
 }

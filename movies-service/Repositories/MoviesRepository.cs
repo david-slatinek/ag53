@@ -113,4 +113,16 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
         Context.Movies.Remove(movie);
         Context.SaveChanges();
     }
+
+    /// <inheritdoc />
+    public List<MovieDto> GetMovies()
+    {
+        return Context.Movies.Select(m => new MovieDto
+        {
+            Id = m.Id,
+            Title = m.Title,
+            Description = m.Description,
+            Release = m.Release.ToString("yyyy-MM-dd")
+        }).ToList();
+    }
 }

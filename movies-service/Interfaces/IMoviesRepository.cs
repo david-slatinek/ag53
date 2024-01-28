@@ -35,4 +35,9 @@ public interface IMoviesRepository
     /// </summary>
     /// <param name="id">Movie id.</param>
     void DeleteMovie(Guid id);
+
+    /// <summary>
+    /// Get all movies.
+    /// </summary>
+    List<MovieDto> GetMovies();
 }
