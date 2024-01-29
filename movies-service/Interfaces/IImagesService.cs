@@ -14,4 +14,11 @@ public interface IImagesService
     /// <param name="images">Images.</param>
     /// <returns>A list of added images.</returns>
     Task<List<ImageDto>> AddImages(Guid movieId, List<IFormFile> images);
+
+    /// <summary>
+    /// Get image.
+    /// </summary>
+    /// <param name="imageId">Image id.</param>
+    /// <returns>Image stream.</returns>
+    Task<ImageStream> GetImage(int imageId);
 }

@@ -58,4 +58,39 @@ public class ImagesController(IImagesService imagesService) : Controller
             });
         }
     }
+
+    /// <summary>
+    /// Get image by ID.
+    /// </summary>
+    /// <param name="id">Image ID.</param>
+    /// <returns>Image.</returns>
+    /// <response code="200">Image.</response>
+    /// <response code="400">Image does not exist.</response>
+    /// <response code="500">Internal server error.</response>
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
+    public async Task<IActionResult> GetImage(int id)
+    {
+        try
+        {
+            var imageData = await ImagesService.GetImage(id);
+            return File(imageData.Stream, imageData.ContentType, imageData.FileName);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }

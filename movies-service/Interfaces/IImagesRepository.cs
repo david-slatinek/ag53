@@ -1,4 +1,5 @@
 using movies_service.Models.Database;
+using movies_service.Models.Responses;
 
 namespace movies_service.Interfaces;
 
@@ -13,4 +14,11 @@ public interface IImagesRepository
     /// <param name="image">Image data.</param>
     /// <returns>Added image.</returns>
     public Image CreateImage(Image image);
+
+    /// <summary>
+    /// Get image data from the database.
+    /// </summary>
+    /// <param name="imageId">Image ID.</param>
+    /// <returns>Image data.</returns>
+    public Image GetImage(int imageId);
 }
