@@ -11,5 +11,5 @@ public class UploadImages
     /// Image to upload.
     /// </summary>
     [Required(ErrorMessage = "Images are required.")]
-    public IFormFileCollection Images { get; set; }
+    public IFormFileCollection Images { get; set; } = default!;
 }
