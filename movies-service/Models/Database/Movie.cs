@@ -31,4 +31,9 @@ public class Movie
     /// </summary>
     [Column("release")]
     public DateOnly Release { get; set; }
+
+    /// <summary>
+    /// Images of the movie.
+    /// </summary>
+    public List<Image> Images { get; set; } = null!;
 }

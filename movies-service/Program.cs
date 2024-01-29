@@ -2,11 +2,13 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Minio;
 using movies_service.Data;
 using movies_service.Interfaces;
 using movies_service.Middlewares;
 using movies_service.Repositories;
 using movies_service.Seed;
+using movies_service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,14 @@ builder.Services.AddDbContext<DataContext>(options =>
 );
 builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
+builder.Services.AddScoped<IImagesService, ImagesService>();
+builder.Services.AddScoped<IImagesRepository, ImagesRepository>();
+
+builder.Services.AddMinio(configureClient => configureClient
+    .WithEndpoint(builder.Configuration["MinIOEndpoint"])
+    .WithCredentials(builder.Configuration["MinIOAccessKey"], builder.Configuration["MinIOSecretKey"])
+    .WithSSL(false)
+);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 

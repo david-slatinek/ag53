@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS actors;
 DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS actors_movies;
+DROP TABLE IF EXISTS images;
 
 CREATE TABLE actors
 (
@@ -17,7 +19,7 @@ CREATE TABLE movies
     release     DATE         NOT NULL
 );
 
-CREATE INDEX movies_title_idx ON movies (title);
+CREATE UNIQUE INDEX movies_title_idx ON movies (title);
 
 CREATE TABLE actors_movies
 (
@@ -34,5 +36,19 @@ ALTER TABLE actors_movies
 
 ALTER TABLE actors_movies
     ADD CONSTRAINT fkc_movies_actors_movies FOREIGN KEY (fk_movie) REFERENCES movies (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;
+
+CREATE TABLE images
+(
+    id       int GENERATED ALWAYS AS IDENTITY,
+    fk_movie UUID         NOT NULL,
+    filename VARCHAR(255) NOT NULL
+);
+
+CREATE UNIQUE INDEX images_filename_idx ON images (filename);
+
+ALTER TABLE images
+    ADD CONSTRAINT fkc_movies_images FOREIGN KEY (fk_movie) REFERENCES movies (id)
         ON DELETE CASCADE
         ON UPDATE CASCADE;
