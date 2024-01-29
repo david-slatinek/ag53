@@ -124,24 +124,35 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
     /// <inheritdoc />
     public List<MovieDto> GetMovies()
     {
-        return Context.Movies.Select(m => new MovieDto
+        return Context.Movies.Include(movie => movie.Images).Select(m => new MovieDto
         {
             Id = m.Id,
             Title = m.Title,
             Description = m.Description,
-            Release = m.Release.ToString("yyyy-MM-dd")
+            Release = m.Release.ToString("yyyy-MM-dd"),
+            Images = m.Images.Select(i => new ImageDto
+            {
+                Id = i.Id,
+                FileName = i.FileName
+            }).ToList()
         }).ToList();
     }
 
     /// <inheritdoc />
     public PagedMovies GetPagedMovies(PaginationFilter paginationFilter)
     {
-        var movies = Context.Movies.Select(m => new MovieDto
+        var movies = Context.Movies.Include(movie => movie.Images)
+            .Select(m => new MovieDto
             {
                 Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
-                Release = m.Release.ToString("yyyy-MM-dd")
+                Release = m.Release.ToString("yyyy-MM-dd"),
+                Images = m.Images.Select(i => new ImageDto
+                {
+                    Id = i.Id,
+                    FileName = i.FileName
+                }).ToList()
             })
             .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
             .Take(paginationFilter.PageSize)
@@ -168,7 +179,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
     /// <inheritdoc />
     public List<MovieDto> GetMovieByTitle(string title)
     {
-        var movies = Context.Movies
+        var movies = Context.Movies.Include(movie => movie.Images)
             .Where(m => EF.Functions.ILike(m.Title, $"%{title}%"))
             .ToList();
 
@@ -177,14 +188,19 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Id = m.Id,
             Title = m.Title,
             Description = m.Description,
-            Release = m.Release.ToString("yyyy-MM-dd")
+            Release = m.Release.ToString("yyyy-MM-dd"),
+            Images = m.Images.Select(i => new ImageDto
+            {
+                Id = i.Id,
+                FileName = i.FileName
+            }).ToList()
         }).ToList();
     }
 
     /// <inheritdoc />
     public List<MovieDto> GetMoviesByIds(List<Guid> ids)
     {
-        var movies = Context.Movies
+        var movies = Context.Movies.Include(movie => movie.Images)
             .Where(m => ids.Contains(m.Id))
             .ToList();
 
@@ -193,7 +209,12 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Id = m.Id,
             Title = m.Title,
             Description = m.Description,
-            Release = m.Release.ToString("yyyy-MM-dd")
+            Release = m.Release.ToString("yyyy-MM-dd"),
+            Images = m.Images.Select(i => new ImageDto
+            {
+                Id = i.Id,
+                FileName = i.FileName
+            }).ToList()
         }).ToList();
     }
 }

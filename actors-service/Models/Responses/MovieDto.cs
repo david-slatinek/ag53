@@ -24,4 +24,25 @@ public class MovieDto
     /// Release date of the movie.
     /// </summary>
     public string Release { get; set; } = null!;
+
+    /// <summary>
+    /// Images for the movie.
+    /// </summary>
+    public List<ImageDto> Images { get; set; } = [];
+}
+
+/// <summary>
+/// Image DTO.
+/// </summary>
+public class ImageDto
+{
+    /// <summary>
+    /// Image ID.
+    /// </summary>
+    public int Id { get; set; }
+
+    /// <summary>
+    /// Image filename.
+    /// </summary>
+    public string FileName { get; set; } = null!;
 }
