@@ -15,6 +15,7 @@ namespace acting.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
+[ResponseCache(CacheProfileName = "Default")]
 public class ActingController(IActingService actingService, IActingRepository actingRepository) : Controller
 {
     /// <summary>

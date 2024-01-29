@@ -5,12 +5,24 @@ using actors_service.Middlewares;
 using actors_service.Repositories;
 using actors_service.Seed;
 using actors_service.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddResponseCaching();
+builder.Services.AddControllers(options =>
+{
+    options.CacheProfiles.Add("Default",
+        new CacheProfile
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Any
+        }
+    );
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -75,6 +87,8 @@ if (args.Length > 0)
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseResponseCaching();
 
 app.UseHttpsRedirection();
 

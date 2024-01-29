@@ -15,6 +15,7 @@ namespace actors_service.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
+[ResponseCache(CacheProfileName = "Default")]
 public class ActorsController(IActorsRepository actorsRepository, IMoviesService moviesService) : Controller
 {
     /// <summary>
@@ -241,7 +242,7 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
             {
                 return NoContent();
             }
-            
+
             foreach (var actor in actors.Actors)
             {
                 var movies = MoviesService.GetMoviesForActor(actor.Id);
