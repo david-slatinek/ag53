@@ -23,4 +23,11 @@ public class ImagesRepository(DataContext context) : IImagesRepository
 
         return image;
     }
+
+    /// <inheritdoc />
+    public Image GetImage(int imageId)
+    {
+        var image = Context.Images.Find(imageId) ?? throw new BadHttpRequestException("Image does not exist.");
+        return image;
+    }
 }

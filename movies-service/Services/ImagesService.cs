@@ -89,6 +89,39 @@ public class ImagesService(
         return addedImages;
     }
 
+    /// <inheritdoc />
+    public async Task<ImageStream> GetImage(int imageId)
+    {
+        var image = imagesRepository.GetImage(imageId);
+
+        var memoryStream = new MemoryStream();
+
+        var args = new GetObjectArgs()
+            .WithBucket(image.MovieId.ToString())
+            .WithObject(image.FileName)
+            .WithCallbackStream(x =>
+            {
+                x.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+            });
+
+        await MinioClient.GetObjectAsync(args).ConfigureAwait(false);
+
+        var contentType = image.FileName.Split(".").Last() switch
+        {
+            "png" => "image/png",
+            "jpg" => "image/jpeg",
+            _ => "binary/octet-stream"
+        };
+
+        return new ImageStream
+        {
+            FileName = image.FileName,
+            ContentType = contentType,
+            Stream = memoryStream
+        };
+    }
+
     /// <summary>
     /// Create bucket if it does not exist.
     /// </summary>
