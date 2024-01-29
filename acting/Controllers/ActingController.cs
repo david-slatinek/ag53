@@ -130,4 +130,36 @@ public class ActingController(IActingService actingService, IActingRepository ac
             });
         }
     }
+
+    /// <summary>
+    /// Get all actings.
+    /// </summary>
+    /// <returns>All actings.</returns>
+    /// <response code="200">Returns all actings.</response>
+    /// <response code="204">If there are no actings.</response>
+    /// <response code="500">If there was an error getting the actings.</response>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ActingDto>))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
+    public IActionResult GetActings()
+    {
+        try
+        {
+            var actings = ActingRepository.GetActings();
+            if (actings.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(actings);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
 }
