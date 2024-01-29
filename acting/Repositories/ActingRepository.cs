@@ -56,4 +56,15 @@ public class ActingRepository(DataContext context) : IActingRepository
             Id = a.MovieId
         }).ToList();
     }
+
+    /// <inheritdoc />
+    public List<ActingDto> GetActings()
+    {
+        return Context.Acting.Select(a => new ActingDto
+        {
+            Id = a.Id,
+            ActorId = a.ActorId,
+            MovieId = a.MovieId
+        }).ToList();
+    }
 }

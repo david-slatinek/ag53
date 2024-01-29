@@ -35,4 +35,10 @@ public interface IActingRepository
     /// <param name="actorId">Actor ID.</param>
     /// <returns>List of movies for the actor.</returns>
     List<MovieDto> GetMoviesForActor(Guid actorId);
+
+    /// <summary>
+    /// Get all actings.
+    /// </summary>
+    /// <returns>List of actings.</returns>
+    List<ActingDto> GetActings();
 }
