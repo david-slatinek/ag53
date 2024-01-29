@@ -32,8 +32,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <response code="500">If there was an error creating the movie.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(MovieDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult CreateMovie([FromBody] CreateMovie createMovie)
     {
         try
@@ -67,8 +67,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <response code="500">If there was an error getting the movie.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetMovie(Guid id)
     {
         try
@@ -103,8 +103,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <response code="500">If there was an error updating the movie.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MovieDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult UpdateMovie(Guid id, [FromBody] UpdateMovie updateMovie)
     {
         try
@@ -138,8 +138,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <response code="500">If there was an error deleting the movie.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult DeleteMovie(Guid id)
     {
         try
@@ -172,8 +172,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <response code="500">If there was an error getting the movies.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MovieDto>))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetMovies()
     {
         try
@@ -208,8 +208,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     [HttpGet("paged")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedMovies))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetPagedMovies([FromQuery] PaginationFilter paginationFilter)
     {
         try
@@ -248,8 +248,8 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     /// <response code="500">If there was an error getting the movies.</response>
     [HttpGet("search/{title}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MovieDto>))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetMovieByTitle(string title)
     {
         try
@@ -284,7 +284,7 @@ public class MoviesController(IMoviesRepository moviesRepository) : Controller
     [HttpPost("ids")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MovieDto>))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetMoviesByIds([FromBody] List<Guid> ids)
     {
         try

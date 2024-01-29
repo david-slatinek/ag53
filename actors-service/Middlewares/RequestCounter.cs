@@ -6,6 +6,9 @@ namespace actors_service.Middlewares;
 /// <param name="next">Next request delegate.</param>
 public class RequestCounter(RequestDelegate next)
 {
+    /// <summary>
+    /// Counts for each request.
+    /// </summary>
     private readonly Dictionary<string, int> _counts = new();
 
     /// <summary>
@@ -14,9 +17,9 @@ public class RequestCounter(RequestDelegate next)
     /// <param name="context">HTTP context.</param>
     public async Task Invoke(HttpContext context)
     {
-        var path = context.Request.Path;
         var method = context.Request.Method;
-        
+        var path = context.Request.Path;
+
         var request = $"{method}--{path}";
 
         if (_counts.TryGetValue(request, out var value))

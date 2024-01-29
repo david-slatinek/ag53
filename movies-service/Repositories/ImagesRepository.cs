@@ -26,14 +26,16 @@ public class ImagesRepository(DataContext context) : IImagesRepository
     /// <inheritdoc />
     public Image GetImage(int imageId)
     {
-        var image = Context.Images.Find(imageId) ?? throw new BadHttpRequestException("Image does not exist.");
+        var image = Context.Images.Find(imageId) ??
+                    throw new BadHttpRequestException($"Image with id = {imageId} does not exist.");
         return image;
     }
 
     /// <inheritdoc />
     public void DeleteImage(int id)
     {
-        var image = Context.Images.Find(id) ?? throw new BadHttpRequestException("Image does not exist.");
+        var image = Context.Images.Find(id) ??
+                    throw new BadHttpRequestException($"Image with id = {id} does not exist.");
         Context.Images.Remove(image);
         Context.SaveChanges();
     }

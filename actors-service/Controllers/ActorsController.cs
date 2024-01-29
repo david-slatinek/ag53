@@ -38,8 +38,8 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
     /// <response code="500">If there was an error creating the actor.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActorDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult CreateActor([FromBody] CreateActor createActor)
     {
         try
@@ -73,8 +73,8 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
     /// <response code="500">If there was an error getting the actor.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActorDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetActor(Guid id)
     {
         try
@@ -113,8 +113,8 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
     /// <response code="500">If there was an error updating the actor.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ActorDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult UpdateActor(Guid id, [FromBody] UpdateActor updateActor)
     {
         try
@@ -148,8 +148,8 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
     /// <response code="500">If there was an error deleting the actor.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult DeleteActor(Guid id)
     {
         try
@@ -183,7 +183,7 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ActorDto>))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetActors()
     {
         try
@@ -230,8 +230,8 @@ public class ActorsController(IActorsRepository actorsRepository, IMoviesService
     [HttpGet("paged")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedActors))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult GetPagedActors([FromQuery] PaginationFilter filter)
     {
         try

@@ -14,7 +14,7 @@ public class ValidateImages : ActionFilterAttribute
     /// <summary>
     /// Validate images.
     /// </summary>
-    /// <param name="context"></param>
+    /// <param name="context">Context.</param>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         if (context.ActionArguments["images"] is not UploadImages images || images.Images.Count == 0)

@@ -60,7 +60,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
     public MovieDto GetMovie(Guid id)
     {
         var movie = Context.Movies.Include(movie => movie.Images).FirstOrDefault(m => m.Id == id) ??
-                    throw new BadHttpRequestException("Movie not found.");
+                    throw new BadHttpRequestException($"Movie with id = {id} not found.");
 
         return new MovieDto
         {
@@ -86,7 +86,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
         }
 
         var movieToUpdate = Context.Movies.FirstOrDefault(m => m.Id == id) ??
-                            throw new BadHttpRequestException("Movie not found.");
+                            throw new BadHttpRequestException($"Movie with id = {id} not found.");
 
         var movieExists = Context.Movies.Any(m =>
             m.Title == updateMovie.Title && m.Release == release && m.Release == release && m.Id != id);
@@ -115,7 +115,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
     public void DeleteMovie(Guid id)
     {
         var movie = Context.Movies.FirstOrDefault(m => m.Id == id) ??
-                    throw new BadHttpRequestException("Movie not found.");
+                    throw new BadHttpRequestException($"Movie with id = {id} not found.");
 
         Context.Movies.Remove(movie);
         Context.SaveChanges();

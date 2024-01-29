@@ -79,7 +79,8 @@ public class ActorsRepository(DataContext context) : IActorsRepository
             throw new BadHttpRequestException("Birth date cannot be in the future.");
         }
 
-        var actorToUpdate = Context.Actors.Find(id) ?? throw new BadHttpRequestException("Actor not found.");
+        var actorToUpdate = Context.Actors.Find(id) ??
+                            throw new BadHttpRequestException($"Actor with id = {id} not found.");
 
         var actorExists = Context.Actors.Any(a =>
             a.FirstName == actor.FirstName && a.LastName == actor.LastName &&
@@ -108,7 +109,7 @@ public class ActorsRepository(DataContext context) : IActorsRepository
     /// <inheritdoc />
     public void DeleteActor(Guid id)
     {
-        var actor = Context.Actors.Find(id) ?? throw new BadHttpRequestException("Actor not found.");
+        var actor = Context.Actors.Find(id) ?? throw new BadHttpRequestException($"Actor with id = {id} not found.");
         Context.Actors.Remove(actor);
         Context.SaveChanges();
     }

@@ -11,6 +11,9 @@ namespace movies_service.Mocking;
 /// </summary>
 public class MoviesRepositoryFake : IMoviesRepository
 {
+    /// <summary>
+    /// List of movies.
+    /// </summary>
     private List<Movie> _movies = [];
 
     /// <inheritdoc />
@@ -44,7 +47,8 @@ public class MoviesRepositoryFake : IMoviesRepository
     /// <inheritdoc />
     public MovieDto GetMovie(Guid id)
     {
-        var movie = _movies.FirstOrDefault(m => m.Id == id) ?? throw new BadHttpRequestException("Movie not found.");
+        var movie = _movies.FirstOrDefault(m => m.Id == id) ??
+                    throw new BadHttpRequestException($"Movie with id = {id} not found.");
 
         return new MovieDto
         {
@@ -65,7 +69,7 @@ public class MoviesRepositoryFake : IMoviesRepository
         }
 
         var movieToUpdate = _movies.FirstOrDefault(m => m.Id == id) ??
-                            throw new BadHttpRequestException("Movie not found.");
+                            throw new BadHttpRequestException($"Movie with id = {id} not found.");
 
         movieToUpdate.Title = updateMovie.Title;
         movieToUpdate.Description = updateMovie.Description;
@@ -85,7 +89,8 @@ public class MoviesRepositoryFake : IMoviesRepository
     /// <inheritdoc />
     public void DeleteMovie(Guid id)
     {
-        var movie = _movies.FirstOrDefault(m => m.Id == id) ?? throw new BadHttpRequestException("Movie not found.");
+        var movie = _movies.FirstOrDefault(m => m.Id == id) ??
+                    throw new BadHttpRequestException($"Movie with id = {id} not found.");
         _movies.Remove(movie);
     }
 
@@ -144,6 +149,13 @@ public class MoviesRepositoryFake : IMoviesRepository
     /// <inheritdoc />
     public List<MovieDto> GetMoviesByIds(List<Guid> ids)
     {
-        throw new NotImplementedException();
+        return _movies.Where(m => ids.Contains(m.Id))
+            .Select(m => new MovieDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                Release = m.Release.ToString("yyyy-MM-dd")
+            }).ToList();
     }
 }

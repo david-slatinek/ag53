@@ -11,6 +11,9 @@ namespace actors_service.Mocking;
 /// </summary>
 public class ActorsRepositoryFake : IActorsRepository
 {
+    /// <summary>
+    /// Actors list.
+    /// </summary>
     private List<Actor> _actors = [];
 
     /// <inheritdoc />
@@ -45,7 +48,7 @@ public class ActorsRepositoryFake : IActorsRepository
             Id = actor.Id,
             FirstName = actor.FirstName,
             LastName = actor.LastName,
-            BirthDate = actor.BirthDate.ToString("yyyy-MM-dd")
+            BirthDate = actor.BirthDate.ToString("yyyy-MM-dd"),
         };
     }
 
