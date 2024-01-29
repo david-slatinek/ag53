@@ -14,6 +14,7 @@ namespace movies_service.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
+[ResponseCache(CacheProfileName = "Default")]
 public class MoviesController(IMoviesRepository moviesRepository) : Controller
 {
     /// <summary>

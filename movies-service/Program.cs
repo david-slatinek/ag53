@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using movies_service.Data;
@@ -9,7 +10,18 @@ using movies_service.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddResponseCaching();
+builder.Services.AddControllers(options =>
+{
+    options.CacheProfiles.Add("Default",
+        new CacheProfile
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Any
+        }
+    );
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -73,6 +85,8 @@ if (args.Length > 0)
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseResponseCaching();
 
 app.UseHttpsRedirection();
 
