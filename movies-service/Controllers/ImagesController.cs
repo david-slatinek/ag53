@@ -26,7 +26,7 @@ public class ImagesController(IImagesService imagesService) : Controller
     /// </summary>
     /// <param name="movieId">Movie ID.</param>
     /// <param name="images">Images to upload.</param>
-    /// <returns>HTTP response.</returns>
+    /// <returns>Created image IDs.</returns>
     /// <response code="201">Images were uploaded.</response>
     /// <response code="400">Files were not provided or movie does not exist.</response>
     /// <response code="500">Internal server error.</response>
@@ -77,6 +77,41 @@ public class ImagesController(IImagesService imagesService) : Controller
         {
             var imageData = await ImagesService.GetImage(id);
             return File(imageData.Stream, imageData.ContentType, imageData.FileName);
+        }
+        catch (BadHttpRequestException e)
+        {
+            return BadRequest(new Error
+            {
+                Message = e.Message
+            });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Error
+            {
+                Message = e.Message
+            });
+        }
+    }
+
+    /// <summary>
+    /// Delete image by ID.
+    /// </summary>
+    /// <param name="id">Image ID.</param>
+    /// <returns>No content.</returns>
+    /// <response code="204">Image was deleted.</response>
+    /// <response code="400">Image does not exist.</response>
+    /// <response code="500">Internal server error.</response>
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
+    public async Task<IActionResult> DeleteImage(int id)
+    {
+        try
+        {
+            await ImagesService.DeleteImage(id);
+            return NoContent();
         }
         catch (BadHttpRequestException e)
         {

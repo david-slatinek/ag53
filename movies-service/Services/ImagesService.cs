@@ -92,7 +92,7 @@ public class ImagesService(
     /// <inheritdoc />
     public async Task<ImageStream> GetImage(int imageId)
     {
-        var image = imagesRepository.GetImage(imageId);
+        var image = ImagesRepository.GetImage(imageId);
 
         var memoryStream = new MemoryStream();
 
@@ -120,6 +120,20 @@ public class ImagesService(
             ContentType = contentType,
             Stream = memoryStream
         };
+    }
+
+    /// <inheritdoc />
+    public async Task DeleteImage(int imageId)
+    {
+        var image = ImagesRepository.GetImage(imageId);
+
+        ImagesRepository.DeleteImage(imageId);
+
+        var removeObjectArgs = new RemoveObjectArgs()
+            .WithBucket(image.MovieId.ToString())
+            .WithObject(image.FileName);
+
+        await MinioClient.RemoveObjectAsync(removeObjectArgs).ConfigureAwait(false);
     }
 
     /// <summary>

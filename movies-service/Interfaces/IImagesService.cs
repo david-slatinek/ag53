@@ -21,4 +21,10 @@ public interface IImagesService
     /// <param name="imageId">Image id.</param>
     /// <returns>Image stream.</returns>
     Task<ImageStream> GetImage(int imageId);
+
+    /// <summary>
+    /// Delete image.
+    /// </summary>
+    /// <param name="imageId">Image id.</param>
+    Task DeleteImage(int imageId);
 }
