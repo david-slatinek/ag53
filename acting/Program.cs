@@ -1,6 +1,7 @@
 using System.Reflection;
 using acting.Data;
 using acting.Interfaces;
+using acting.Middlewares;
 using acting.Repositories;
 using acting.Services;
 using Microsoft.EntityFrameworkCore;
@@ -52,5 +53,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.UseMiddleware<RequestCounter>();
 
 app.Run();

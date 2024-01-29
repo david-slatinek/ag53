@@ -1,6 +1,7 @@
 using System.Reflection;
 using actors_service.Data;
 using actors_service.Interfaces;
+using actors_service.Middlewares;
 using actors_service.Repositories;
 using actors_service.Seed;
 using actors_service.Services;
@@ -78,5 +79,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.UseMiddleware<RequestCounter>();
 
 app.Run();
