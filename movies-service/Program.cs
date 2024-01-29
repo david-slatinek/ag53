@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using movies_service.Data;
 using movies_service.Interfaces;
+using movies_service.Middlewares;
 using movies_service.Repositories;
 using movies_service.Seed;
 
@@ -76,5 +77,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.UseMiddleware<RequestCounter>();
 
 app.Run();
