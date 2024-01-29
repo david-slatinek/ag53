@@ -24,4 +24,9 @@ public class MovieDto
     /// Release date of the movie.
     /// </summary>
     public string Release { get; set; } = null!;
+    
+    /// <summary>
+    /// Images for the movie.
+    /// </summary>
+    public List<ImageDto> Images { get; set; } = [];
 }

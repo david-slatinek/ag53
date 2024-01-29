@@ -59,7 +59,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
     /// <inheritdoc />
     public MovieDto GetMovie(Guid id)
     {
-        var movie = Context.Movies.FirstOrDefault(m => m.Id == id) ??
+        var movie = Context.Movies.Include(movie => movie.Images).FirstOrDefault(m => m.Id == id) ??
                     throw new BadHttpRequestException("Movie not found.");
 
         return new MovieDto
@@ -67,7 +67,12 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             Id = movie.Id,
             Title = movie.Title,
             Description = movie.Description,
-            Release = movie.Release.ToString("yyyy-MM-dd")
+            Release = movie.Release.ToString("yyyy-MM-dd"),
+            Images = movie.Images.Select(i => new ImageDto
+            {
+                Id = i.Id,
+                FileName = i.FileName
+            }).ToList()
         };
     }
 

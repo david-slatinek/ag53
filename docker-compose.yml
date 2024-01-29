@@ -3,6 +3,8 @@ version: "3.8"
 services:
   actors-service:
     build: ./actors-service
+    container_name: actors-service-container
+    hostname: actors-service
     restart: always
     ports:
       - "8080:8080"
@@ -11,6 +13,8 @@ services:
   
   movies-service:
     build: ./movies-service
+    container_name: movies-service-container
+    hostname: movies-service
     restart: always
     ports:
       - "8081:8081"
@@ -19,6 +23,8 @@ services:
   
   acting-service:
     build: ./acting
+    container_name: acting-service-container
+    hostname: acting-service
     restart: always
     ports:
       - "8082:8082"
