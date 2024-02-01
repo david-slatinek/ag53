@@ -4,3 +4,4 @@ obj
 actors-db/.env
 actors-db/data
 Migrations
+actors-service.sln.DotSettings.user
