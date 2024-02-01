@@ -1,3 +1,4 @@
+using AutoMapper;
 using movies_service.Data;
 using movies_service.Interfaces;
 using movies_service.Models.Database;
@@ -12,12 +13,18 @@ namespace movies_service.Repositories;
 /// Movies repository.
 /// </summary>
 /// <param name="context">Database context.</param>
-public class MoviesRepository(DataContext context) : IMoviesRepository
+/// <param name="mapper">Mapper.</param>
+public class MoviesRepository(DataContext context, IMapper mapper) : IMoviesRepository
 {
     /// <summary>
     /// Database context.
     /// </summary>
     private DataContext Context { get; } = context;
+
+    /// <summary>
+    /// Mapper.
+    /// </summary>
+    private IMapper Mapper { get; } = mapper;
 
     /// <inheritdoc />
     public MovieDto CreateMovie(CreateMovie createMovie)
@@ -36,24 +43,13 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
             throw new BadHttpRequestException("Movie already exists.");
         }
 
-        var movie = new Movie
-        {
-            Id = Guid.NewGuid(),
-            Title = createMovie.Title,
-            Description = createMovie.Description,
-            Release = DateOnly.Parse(createMovie.Release)
-        };
+        var movie = Mapper.Map<Movie>(createMovie);
+        movie.Id = Guid.NewGuid();
 
         Context.Movies.Add(movie);
         Context.SaveChanges();
 
-        return new MovieDto
-        {
-            Id = movie.Id,
-            Title = movie.Title,
-            Description = movie.Description,
-            Release = movie.Release.ToString("yyyy-MM-dd")
-        };
+        return Mapper.Map<MovieDto>(movie);
     }
 
     /// <inheritdoc />
@@ -62,18 +58,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
         var movie = Context.Movies.Include(movie => movie.Images).FirstOrDefault(m => m.Id == id) ??
                     throw new BadHttpRequestException($"Movie with id = {id} not found.");
 
-        return new MovieDto
-        {
-            Id = movie.Id,
-            Title = movie.Title,
-            Description = movie.Description,
-            Release = movie.Release.ToString("yyyy-MM-dd"),
-            Images = movie.Images.Select(i => new ImageDto
-            {
-                Id = i.Id,
-                FileName = i.FileName
-            }).ToList()
-        };
+        return Mapper.Map<MovieDto>(movie);
     }
 
     /// <inheritdoc />
@@ -102,13 +87,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
 
         Context.SaveChanges();
 
-        return new MovieDto
-        {
-            Id = movieToUpdate.Id,
-            Title = movieToUpdate.Title,
-            Description = movieToUpdate.Description,
-            Release = movieToUpdate.Release.ToString("yyyy-MM-dd")
-        };
+        return Mapper.Map<MovieDto>(movieToUpdate);
     }
 
     /// <inheritdoc />
@@ -124,36 +103,16 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
     /// <inheritdoc />
     public List<MovieDto> GetMovies()
     {
-        return Context.Movies.Include(movie => movie.Images).Select(m => new MovieDto
-        {
-            Id = m.Id,
-            Title = m.Title,
-            Description = m.Description,
-            Release = m.Release.ToString("yyyy-MM-dd"),
-            Images = m.Images.Select(i => new ImageDto
-            {
-                Id = i.Id,
-                FileName = i.FileName
-            }).ToList()
-        }).ToList();
+        return Mapper.Map<List<MovieDto>>(Context.Movies.Include(movie => movie.Images).ToList());
     }
 
     /// <inheritdoc />
     public PagedMovies GetPagedMovies(PaginationFilter paginationFilter)
     {
+        // use automapper to map the movies to MovieDto
+
         var movies = Context.Movies.Include(movie => movie.Images)
-            .Select(m => new MovieDto
-            {
-                Id = m.Id,
-                Title = m.Title,
-                Description = m.Description,
-                Release = m.Release.ToString("yyyy-MM-dd"),
-                Images = m.Images.Select(i => new ImageDto
-                {
-                    Id = i.Id,
-                    FileName = i.FileName
-                }).ToList()
-            })
+            .Select(m => Mapper.Map<MovieDto>(m))
             .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
             .Take(paginationFilter.PageSize)
             .ToList();
@@ -182,19 +141,8 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
         var movies = Context.Movies.Include(movie => movie.Images)
             .Where(m => EF.Functions.ILike(m.Title, $"%{title}%"))
             .ToList();
-
-        return movies.Select(m => new MovieDto
-        {
-            Id = m.Id,
-            Title = m.Title,
-            Description = m.Description,
-            Release = m.Release.ToString("yyyy-MM-dd"),
-            Images = m.Images.Select(i => new ImageDto
-            {
-                Id = i.Id,
-                FileName = i.FileName
-            }).ToList()
-        }).ToList();
+        
+        return Mapper.Map<List<MovieDto>>(movies);
     }
 
     /// <inheritdoc />
@@ -203,18 +151,7 @@ public class MoviesRepository(DataContext context) : IMoviesRepository
         var movies = Context.Movies.Include(movie => movie.Images)
             .Where(m => ids.Contains(m.Id))
             .ToList();
-
-        return movies.Select(m => new MovieDto
-        {
-            Id = m.Id,
-            Title = m.Title,
-            Description = m.Description,
-            Release = m.Release.ToString("yyyy-MM-dd"),
-            Images = m.Images.Select(i => new ImageDto
-            {
-                Id = i.Id,
-                FileName = i.FileName
-            }).ToList()
-        }).ToList();
+        
+        return Mapper.Map<List<MovieDto>>(movies);
     }
 }
