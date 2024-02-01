@@ -1,9 +1,11 @@
 using actors_service.Controllers;
 using actors_service.Interfaces;
+using actors_service.Mappings;
 using actors_service.Mocking;
 using actors_service.Models.Filters;
 using actors_service.Models.Requests;
 using actors_service.Models.Responses;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace actors_service.actors_service_test;
@@ -20,8 +22,10 @@ public class ActorsControllerTest
     /// </summary>
     public ActorsControllerTest()
     {
-        IActorsRepository repository = new ActorsRepositoryFake();
-        _controller = new ActorsController(repository, null);
+        var mapper = new MapperConfiguration(cfg => cfg.AddProfile(new ActorProfile())).CreateMapper();
+        IActorsRepository repository = new ActorsRepositoryFake(mapper);
+        IMoviesService moviesService = new MoviesServiceFake();
+        _controller = new ActorsController(repository, moviesService);
     }
 
     /// <summary>
