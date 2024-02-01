@@ -25,7 +25,7 @@ public class ActingService(IActingRepository actingRepository, IConfiguration co
     private IConfiguration Configuration { get; } = configuration;
 
     /// <inheritdoc />
-    public Acting CreateActing(CreateActing createActing)
+    public ActingDto CreateActing(CreateActing createActing)
     {
         var alreadyExists = ActingRepository.AlreadyExists(createActing);
         if (alreadyExists)

@@ -1,5 +1,6 @@
 using acting.Models.Database;
 using acting.Models.Requests;
+using acting.Models.Responses;
 
 namespace acting.Interfaces;
 
@@ -13,5 +14,5 @@ public interface IActingService
     /// </summary>
     /// <param name="createActing">Acting data.</param>
     /// <returns>Acting.</returns>
-    Acting CreateActing(CreateActing createActing);
+    ActingDto CreateActing(CreateActing createActing);
 }

@@ -1,5 +1,4 @@
 using acting.Interfaces;
-using acting.Models.Database;
 using acting.Models.Requests;
 using acting.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +36,7 @@ public class ActingController(IActingService actingService, IActingRepository ac
     /// <response code="400">If the acting data is invalid.</response>
     /// <response code="500">If there was an error creating the acting.</response>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Acting))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ActingDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
     public IActionResult CreateActing([FromBody] CreateActing createActing)
