@@ -82,7 +82,7 @@ public class MoviesService(IConfiguration configuration) : IMoviesService
         var client = new HttpClient();
         client.BaseAddress = new Uri(url);
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        
+
         var response = client.PostAsync("/api/movies/ids",
             new StringContent(JsonConvert.SerializeObject(movieIds), Encoding.UTF8, "application/json")).Result;
 

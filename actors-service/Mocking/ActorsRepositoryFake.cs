@@ -3,53 +3,43 @@ using actors_service.Models.Database;
 using actors_service.Models.Filters;
 using actors_service.Models.Requests;
 using actors_service.Models.Responses;
+using AutoMapper;
 
 namespace actors_service.Mocking;
 
 /// <summary>
 /// Repository used for unit testing.
+/// <param name="mapper">Mapper.</param>
 /// </summary>
-public class ActorsRepositoryFake : IActorsRepository
+public class ActorsRepositoryFake(IMapper mapper) : IActorsRepository
 {
     /// <summary>
     /// Actors list.
     /// </summary>
     private List<Actor> _actors = [];
 
+    /// <summary>
+    /// Mapper.
+    /// </summary>
+    private IMapper Mapper { get; } = mapper;
+
     /// <inheritdoc />
     public ActorDto CreateActor(CreateActor createActor)
     {
-        var actor = new Actor
-        {
-            Id = Guid.NewGuid(),
-            FirstName = createActor.FirstName,
-            LastName = createActor.LastName,
-            BirthDate = DateOnly.Parse(createActor.BirthDate)
-        };
+        var actor = Mapper.Map<Actor>(createActor);
+        actor.Id = Guid.NewGuid();
 
         _actors.Add(actor);
 
-        return new ActorDto
-        {
-            Id = actor.Id,
-            FirstName = actor.FirstName,
-            LastName = actor.LastName,
-            BirthDate = actor.BirthDate.ToString("yyyy-MM-dd")
-        };
+        return Mapper.Map<ActorDto>(actor);
     }
 
     /// <inheritdoc />
     public ActorDto GetActorById(Guid id)
     {
-        var actor = _actors.FirstOrDefault(a => a.Id == id) ?? throw new BadHttpRequestException("Actor not found.");
-
-        return new ActorDto
-        {
-            Id = actor.Id,
-            FirstName = actor.FirstName,
-            LastName = actor.LastName,
-            BirthDate = actor.BirthDate.ToString("yyyy-MM-dd"),
-        };
+        var actor = _actors.FirstOrDefault(a => a.Id == id) ??
+                    throw new BadHttpRequestException($"Actor with id = {id} not found.");
+        return Mapper.Map<ActorDto>(actor);
     }
 
     /// <inheritdoc />
@@ -65,13 +55,7 @@ public class ActorsRepositoryFake : IActorsRepository
         // update the actor in the list
         _actors = _actors.Select(a => a.Id == id ? actorToUpdate : a).ToList();
 
-        return new ActorDto
-        {
-            Id = actorToUpdate.Id,
-            FirstName = actorToUpdate.FirstName,
-            LastName = actorToUpdate.LastName,
-            BirthDate = actorToUpdate.BirthDate.ToString("yyyy-MM-dd")
-        };
+        return Mapper.Map<ActorDto>(actorToUpdate);
     }
 
     /// <inheritdoc />
@@ -86,25 +70,13 @@ public class ActorsRepositoryFake : IActorsRepository
     /// <inheritdoc />
     public List<ActorDto> GetActors()
     {
-        return _actors.Select(a => new ActorDto
-        {
-            Id = a.Id,
-            FirstName = a.FirstName,
-            LastName = a.LastName,
-            BirthDate = a.BirthDate.ToString("yyyy-MM-dd")
-        }).ToList();
+        return _actors.Select(a => Mapper.Map<ActorDto>(a)).ToList();
     }
 
     /// <inheritdoc />
     public PagedActors GetPagedActors(PaginationFilter paginationFilter)
     {
-        var actors = _actors.Select(a => new ActorDto
-            {
-                Id = a.Id,
-                FirstName = a.FirstName,
-                LastName = a.LastName,
-                BirthDate = a.BirthDate.ToString("yyyy-MM-dd")
-            })
+        var actors = _actors.Select(a => Mapper.Map<ActorDto>(a))
             .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
             .Take(paginationFilter.PageSize)
             .ToList();
