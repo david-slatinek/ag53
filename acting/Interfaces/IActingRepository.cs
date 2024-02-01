@@ -14,7 +14,7 @@ public interface IActingRepository
     /// </summary>
     /// <param name="createActing">Acting data.</param>
     /// <returns>Created acting.</returns>
-    Acting CreateActing(CreateActing createActing);
+    ActingDto CreateActing(CreateActing createActing);
 
     /// <summary>
     /// Check if an acting already exists.

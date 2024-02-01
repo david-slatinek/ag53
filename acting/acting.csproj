@@ -9,10 +9,37 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="acting-test\bin\Debug\net8.0\acting-test.deps.json"/>
+        <_ContentIncludedByDefault Remove="acting-test\bin\Debug\net8.0\acting-test.runtimeconfig.json"/>
+        <_ContentIncludedByDefault Remove="acting-test\obj\acting-test.csproj.nuget.dgspec.json"/>
+        <_ContentIncludedByDefault Remove="acting-test\obj\Debug\net8.0\acting-test.sourcelink.json"/>
+        <_ContentIncludedByDefault Remove="acting-test\obj\project.assets.json"/>
+        <_ContentIncludedByDefault Remove="acting-test\obj\project.packagespec.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="acting-test\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Remove="acting-test\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Remove="acting-test\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="acting-test\**"/>
     </ItemGroup>
 
     <PropertyGroup>
