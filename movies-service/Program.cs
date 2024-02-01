@@ -40,6 +40,8 @@ builder.Services.AddMinio(configureClient => configureClient
     .WithSSL(false)
 );
 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddSwaggerGen(options =>

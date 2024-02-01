@@ -8,7 +8,7 @@ using actors_service.Models.Responses;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace actors_service.actors_service_test;
+namespace actors_service_test;
 
 /// <summary>
 /// Test actors controller.
