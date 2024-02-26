@@ -1,4 +1,11 @@
-# ag53
+# Description
+
+<div align="center">
+    <img alt=".NET" src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white"/>
+    <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"/>
+    <img alt="MinIO" src="https://img.shields.io/badge/minio-C72E49?style=for-the-badge&logo=minio&logoColor=white"/>
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"/>
+</div>
 
 Project for managing actors and movies made with ASP.NET Core 8.0, PostgreSQL, and MinIO.
 
